@@ -1,52 +1,22 @@
-# =============================================================================
-# requirements.txt — dependencias para Streamlit Cloud:
-#   pulp>=2.7.0
-#   pandas>=1.5.0
-#   streamlit>=1.28.0
-#   supabase>=2.0.0
-#   python-dotenv>=1.0.0
-#   websocket-client>=1.6.0
-# =============================================================================
-
 import streamlit as st
 import pandas as pd
+import pulp
 import os
 import json
 from datetime import datetime, timezone
-
-# ── Importaciones con manejo de errores explícito para Streamlit Cloud ───────
-try:
-    from dotenv import load_dotenv
-except ModuleNotFoundError:
-    st.error("❌ Dependencia faltante: `python-dotenv`. Agrega `python-dotenv>=1.0.0` a requirements.txt")
-    st.stop()
-
-try:
-    from supabase import create_client, Client
-except ModuleNotFoundError:
-    st.error("❌ Dependencia faltante: `supabase`. Agrega `supabase>=2.0.0` a requirements.txt")
-    st.stop()
-
-try:
-    from optimizacion import (
-        optimizar_mezcla,
-        optimizar_descremado,
-        calcular_crema,
-        calcular_leche,
-        FAT_LECHE_MIN, FAT_LECHE_MAX,
-        FAT_CREMA_MIN, FAT_CREMA_MAX,
-        CLARIFIER_RATE_L_H,
-        _fmt_tiempo,
-    )
-except ModuleNotFoundError as _e:
-    st.error(f"❌ No se pudo importar el módulo de optimización: {_e}. Verifica que `pulp>=2.7.0` esté en requirements.txt")
-    st.stop()
-
-try:
-    import websocket as ws_lib
-except ModuleNotFoundError:
-    st.error("❌ Dependencia faltante: `websocket-client`. Agrega `websocket-client>=1.6.0` a requirements.txt")
-    st.stop()
+from dotenv import load_dotenv
+from supabase import create_client, Client
+from optimizacion import (
+    optimizar_mezcla,
+    optimizar_descremado,
+    calcular_crema,
+    calcular_leche,
+    FAT_LECHE_MIN, FAT_LECHE_MAX,
+    FAT_CREMA_MIN, FAT_CREMA_MAX,
+    CLARIFIER_RATE_L_H,
+    _fmt_tiempo,
+)
+import websocket as ws_lib
 
 load_dotenv()
 
@@ -608,7 +578,15 @@ st.markdown("---")
 # BARRA LATERAL
 # ─────────────────────────────────────────────────────────────────────────────
 with st.sidebar:
-    st.image("Logo.jpeg", use_container_width=True)
+    # CORRECCIÓN: Logo.jpeg puede no estar en el repositorio.
+    # Se intenta cargar; si falta, se muestra el nombre de la app como fallback.
+    if os.path.exists("Logo.jpeg"):
+        st.image("Logo.jpeg", use_container_width=True)
+    else:
+        st.markdown(
+            "<h2 style='text-align:center; color:#4A90D9;'>🥛 Estandarización</h2>",
+            unsafe_allow_html=True,
+        )
     st.markdown("<br>", unsafe_allow_html=True)
     st.header("📊 Resumen")
     if st.session_state.tanques:
