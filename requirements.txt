@@ -1,0 +1,9 @@
+# ─── Streamlit App: Milk Standardization System ───────────────────────────
+# Sube este archivo a la raíz del repositorio junto con main.py y optimizacion.py
+
+streamlit>=1.28.0
+pandas>=1.5.0
+pulp>=2.7.0
+supabase>=2.0.0
+python-dotenv>=1.0.0
+websocket-client>=1.6.0
